@@ -62,30 +62,11 @@ class Receta {
       fotoReceta: map['pathFotoReceta'],
       procedimientoReceta: map['procedimientoReceta'],
       ingredientesReceta:
-          List<String>.from(map['ingredientesRecet'].split(',')),
+          List<String>.from(map['ingredientesReceta'].split(',')),
       tiempoReceta: map['tiempoReceta'],
       categoriaReceta: map['categoriaReceta'],
     );
   }
-  /*Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'username': username,
-      'password': password,
-      'imageProfile': imagePaht,
-    };
-  }
-
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      id: map['id'],
-      name: map['name'],
-      username: map['username'],
-      password: map['password'],
-      imagePaht: map['imageProfile'],
-    );
-  }*/
 }
 
 class Usuario {

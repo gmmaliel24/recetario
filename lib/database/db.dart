@@ -98,7 +98,7 @@ class RecetaBasesDeDatos {
 
   Future<Receta> createReceta(Receta receta) async {
     final db = await initializadeDB();
-    final id = await db.insert('recetas', receta.toMap());
+    final id = await db.insert('Receta', receta.toMap());
     return receta.copy(idReceta: id);
   }
 
@@ -108,7 +108,7 @@ class RecetaBasesDeDatos {
       'Receta',
       columns: [
         'idReceta',
-        'nombreReceta',
+        'nameReceta',
         'descripcionReceta',
         'pathFotoReceta',
         'procedimientoReceta ',
@@ -130,7 +130,7 @@ class RecetaBasesDeDatos {
   static Future<List<Receta>> readAllReceta() async {
     final db = await initializadeDB();
     const orderBY = 'nameReceta ASC';
-    final result = await db.query('recetas', orderBy: orderBY);
+    final result = await db.query('Receta', orderBy: orderBY);
     return result.map((json) => Receta.fromMap(json)).toList();
   }
 
@@ -139,7 +139,7 @@ class RecetaBasesDeDatos {
   static Future<int> updateReceta(Receta receta) async {
     final db = await initializadeDB();
     return db.update(
-      'recetas',
+      'Receta',
       receta.toMap(),
       where: 'idReceta =?',
       whereArgs: [receta.idReceta],
@@ -149,7 +149,7 @@ class RecetaBasesDeDatos {
   //Borrar datos
   static Future<int> deleteReceta(int id) async {
     final db = await initializadeDB();
-    return await db.delete('recetas', where: 'idReceta = ?', whereArgs: [id]);
+    return await db.delete('Receta', where: 'idReceta = ?', whereArgs: [id]);
   }
 
   //Cerrar base de datos

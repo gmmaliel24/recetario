@@ -79,6 +79,8 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
             content: Text("Receta Guardada Con Éxito"),
           ),
         );
+
+        Navigator.of(context).pop(true);
       }
     } catch (e) {
       print(e);
