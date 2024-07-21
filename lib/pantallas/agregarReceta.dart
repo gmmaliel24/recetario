@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class AgregaRreceta extends StatefulWidget {
@@ -17,27 +18,32 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
   File? _imageReceta;
 
   void _guardarReceta() async {
-    try{
+    try {
       String nombreReceta = _controllerNombreReceta.text;
       String descripcionReceta = _controllerDescripcionReceta.text;
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
-      Int tiempoReceta = _controllerTiempoReceta;
-      File imagen = _imageReceta;
+      int tiempoReceta = _controllerTiempoReceta.text as int;
+      File? imagen = _imageReceta;
 
-      if(
-        nombreReceta.isEmpty || descripcionReceta.isEmpty || ingredientesReceta.isEmpty || instruccionesReceta.isEmpty || tiempoReceta || imagen == null
-      ){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Por favor llene todos los campos')));
+      if (nombreReceta.isEmpty ||
+          descripcionReceta.isEmpty ||
+          ingredientesReceta.isEmpty ||
+          instruccionesReceta.isEmpty ||
+          tiempoReceta == 0 ||
+          imagen == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Por favor llene todos los campos')));
       }
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al guardar toso')))
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error al guardar toso')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: ElevatedButton(
@@ -89,11 +95,10 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
               TextField(
                 controller: _controllerNombreReceta,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Ingrese el nombre de la Receta',
-                  ),
+                  border: OutlineInputBorder(),
+                  labelText: 'Ingrese el nombre de la Receta',
+                ),
               ),
-              Size
             ],
           ),
         ),
