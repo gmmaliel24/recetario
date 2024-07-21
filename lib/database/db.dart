@@ -127,7 +127,7 @@ class RecetaBasesDeDatos {
   }
 
   //Todas las recetas
-  Future<List<Receta>> readAllReceta() async {
+  static Future<List<Receta>> readAllReceta() async {
     final db = await initializadeDB();
     const orderBY = 'nameReceta ASC';
     final result = await db.query('recetas', orderBy: orderBY);
@@ -136,7 +136,7 @@ class RecetaBasesDeDatos {
 
   //Actualizar Datos
 
-  Future<int> updateReceta(Receta receta) async {
+  static Future<int> updateReceta(Receta receta) async {
     final db = await initializadeDB();
     return db.update(
       'recetas',
@@ -147,7 +147,7 @@ class RecetaBasesDeDatos {
   }
 
   //Borrar datos
-  Future<int> deleteReceta(int id) async {
+  static Future<int> deleteReceta(int id) async {
     final db = await initializadeDB();
     return await db.delete('recetas', where: 'idReceta = ?', whereArgs: [id]);
   }

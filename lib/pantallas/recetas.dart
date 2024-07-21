@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_recetario/database/db.dart';
+import 'package:proyecto_recetario/models/datosEstructura.dart';
 import 'package:proyecto_recetario/pantallas/agregarReceta.dart';
 import 'package:proyecto_recetario/widgets/drawerMenu.dart';
 
@@ -12,15 +14,22 @@ class RecetasUsuario extends StatefulWidget {
 }
 
 class _RecetasUsuario extends State<RecetasUsuario> {
+  final d
+n
   TextEditingController buscadorController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    
   }
 
-  void _busquedaCategoria(String query) {
+  Future<void> _busquedaCategoria(String query) async {
     //final filtrarElementos
+    dynamic recetas = await RecetaBasesDeDatos.readAllReceta();
+    setState(() {
+          
+        });
   }
 
   @override
@@ -66,7 +75,9 @@ class _RecetasUsuario extends State<RecetasUsuario> {
                     },
                   )),
               // ver lista de las recetas
-
+              ListView.builder(itemBuilder: (context, index){
+                
+              },),
               // boton de busqueda
               Padding(
                 padding: EdgeInsets.all(20),

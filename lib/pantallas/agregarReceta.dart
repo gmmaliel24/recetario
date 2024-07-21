@@ -47,8 +47,8 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
       String descripcionReceta = _controllerDescripcionReceta.text;
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
-      int tiempoReceta = _controllerTiempoReceta.text as int;
-      String categoriaReceta = _controllerCategoriaReceta.text;
+      String tiempoReceta = _controllerTiempoReceta.text;
+      String categoriaReceta = "pan";
       File? imagen = _imageReceta;
 
       if (nombreReceta.isEmpty ||
@@ -58,7 +58,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
           tiempoReceta == 0 ||
           imagen == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Por favor llene todos los campos')));
+            const SnackBar(content: Text('Por favor llene todos los campos')));
       } else {
         final directory = await getApplicationDocumentsDirectory();
         final path = directory.path;
@@ -70,7 +70,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
             fotoReceta: localImage.path,
             procedimientoReceta: instruccionesReceta,
             ingredientesReceta: ingredientesReceta.split(','),
-            tiempoReceta: tiempoReceta,
+            tiempoReceta: int.parse(tiempoReceta),
             categoriaReceta: categoriaReceta);
 
         await RecetaBasesDeDatos.inserReceta(receta);
@@ -81,8 +81,12 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error al guardar toso')));
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error al Guardar la Receta'),
+        ),
+      );
     }
   }
 
@@ -91,16 +95,6 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: ElevatedButton(
-            onPressed: () {
-              Navigator.pop;
-            },
-            child: const Text(
-              'Regresar',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            )),
         title: const Center(
           child: Text(
             'Editar Receta',
@@ -112,40 +106,62 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         ),
         actions: [
           ElevatedButton(
-              onPressed: _guardarReceta,
-              child: const Row(
-                children: [
-                  Text(
-                    'Guardar',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+            onPressed: _guardarReceta,
+            child: const Row(
+              children: [
+                Text(
+                  'Guardar',
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  Icon(Icons.save)
-                ],
-              ))
+                ),
+                Icon(
+                  Icons.save,
+                  color: Colors.black,
+                )
+              ],
+            ),
+            style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.white)),
+          )
         ],
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: _controllerNombreReceta,
+                    decoration:
+                        const InputDecoration(labelText: 'Nombre de la Receta'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por Favor ingrese un nombre';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 TextFormField(
-                  controller: _controllerNombreReceta,
-                  decoration: InputDecoration(labelText: 'Nombre de la Receta'),
+                  controller: _controllerDescripcionReceta,
+                  decoration: const InputDecoration(
+                      labelText: 'Descripción de la receta'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por Favor ingrese un nombre';
+                      return 'Por favor ingrese la descripción de la receta';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: _controllerIngredientesReceta,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Ingredientes (separados por coma)'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -156,7 +172,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                 ),
                 TextFormField(
                   controller: _controllerInstruccionesReceta,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText:
                           'Ingrese las instrucciones para preparar la receta'),
                   keyboardType: TextInputType.multiline,
@@ -169,7 +185,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                 ),
                 TextFormField(
                   controller: _controllerTiempoReceta,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Ingrese el tiempo de preparacion (minutos)'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -179,7 +195,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -206,12 +222,12 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 _imageReceta == null
-                    ? Center(
+                    ? const Center(
                         child: Text('No se ha seleccionado ninguna imagen.'))
                     : Image.file(_imageReceta!),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
               ],
             ),
           ),
