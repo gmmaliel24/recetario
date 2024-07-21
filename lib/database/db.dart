@@ -38,6 +38,22 @@ class RecetaBasesDeDatos {
     );
   }
 
+  static Future<int?> idUser(String username, String password) async {
+    final Database db = await initializadeDB();
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Usuario',
+      columns: ['idUsuario'],
+      where: 'correoUsuario = ? AND contraseniaUsuario = ?',
+      whereArgs: [username, password],
+    );
+
+    if (maps.isNotEmpty) {
+      return maps.first['idUsuario'] as int?;
+    } else {
+      return null;
+    }
+  }
+
   static Future<Usuario?> readIdUser(int id) async {
     final Database db = await initializadeDB();
     final List<Map<String, dynamic>> result = await db.query(

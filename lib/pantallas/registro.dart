@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
 import 'package:proyecto_recetario/pantallas/inicio_sesion.dart';
+import 'package:proyecto_recetario/pantallas/recetas.dart';
 
 class Registro extends StatefulWidget {
   @override
@@ -19,7 +20,8 @@ class _RegistroState extends State<Registro> {
   final TextEditingController _controllerConfirmPassword =
       TextEditingController();
   File? _image;
-  bool _obscureText = true;
+  bool _obscureText1 = true;
+  bool _obscureText2 = true;
 
   void registroUsuario() async {
     try {
@@ -30,6 +32,9 @@ class _RegistroState extends State<Registro> {
       String confirmPassword = _controllerConfirmPassword.text;
       File? image = _image;
 
+      bool usuarioExistente =
+          await RecetaBasesDeDatos.auntenticarUsuario(email, password);
+
       if (name.isEmpty ||
           lastName.isEmpty ||
           email.isEmpty ||
@@ -39,6 +44,25 @@ class _RegistroState extends State<Registro> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Por favor llene todos los campos'),
+          ),
+        );
+      } else if (password.length < 8) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('La Cotraseña debe ser mayor a 8 caracteres'),
+          ),
+        );
+      } else if (password != confirmPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Las Contraseñas no Coinciden'),
+          ),
+        );
+      } else if (usuarioExistente) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'El Correo o Usuario ya existe. ¡Por favor busqué otro Correo o Usuario!'),
           ),
         );
       } else {
@@ -55,9 +79,20 @@ class _RegistroState extends State<Registro> {
 
         await RecetaBasesDeDatos.insertUsuario(user);
 
+        int idUsuarioRegistrado =
+            await RecetaBasesDeDatos.idUser(email, password) as int;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Usuario registrado correctamente'),
+          ),
+        );
+        await Future.delayed(const Duration(seconds: 3));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RecetasUsuario(
+              id: idUsuarioRegistrado,
+            ),
           ),
         );
       }
@@ -70,19 +105,19 @@ class _RegistroState extends State<Registro> {
 
   Future<void> pickImage({required bool fromCamarera}) async {
     try {
-        final picker = ImagePicker();
-        final pickedFile = await picker.pickImage(source: fromCamarera ? ImageSource.camera : ImageSource.gallery);
-        
-        if (pickedFile != null) {
-          setState(() {
-                      _image = File(pickedFile.path);
-                    });
-        }
-        
-        } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al seleccionar la imagen')));
-        }
-    
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+          source: fromCamarera ? ImageSource.camera : ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al seleccionar la imagen')));
+    }
   }
 
   @override
@@ -117,168 +152,177 @@ class _RegistroState extends State<Registro> {
               const SizedBox(
                 height: 25,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ingrese su Nombre: ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  'Ingrese su Nombre: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: _controllerName,
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Ingrese su Apellido: ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: _controllerLastName,
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.person_2_outlined),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Ingrese su Correo: ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: _controllerEmail,
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Ingrese su Contraseña: ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: _controllerPassword,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        suffix: IconButton(
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        )),
-                    obscureText: _obscureText,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Confirme su contraseña: ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: _controllerConfirmPassword,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        suffix: IconButton(
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        )),
-                    obscureText: _obscureText,
-                  ),
-                  SizedBox(height: 20,),
-                  Text('Ingrese su foto de perfil',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    
-              children: [
-                ElevatedButton(
-                  onPressed: () => pickImage(fromCamarera: true),
-                  child: Text('Capturar con cámara'),
                 ),
-                SizedBox(width: 16.0),
-                ElevatedButton(
-                  onPressed: () => pickImage(fromCamarera: false),
-                  child: Text('Seleccionar desde galería'),
+                SizedBox(
+                  height: 5,
                 ),
-              ],
-            ),
-            SizedBox(height: 16.0),
-            _image == null
-                ? Text('No se ha seleccionado ninguna imagen.')
-                : Image.file(_image!),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: registroUsuario,
-              child: Text('Registrar Usuario'),
-            ),
-                ]
-              ),
+                TextField(
+                  controller: _controllerName,
+                  decoration: const InputDecoration(
+                    suffixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Ingrese su Apellido: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextField(
+                  controller: _controllerLastName,
+                  decoration: const InputDecoration(
+                    suffixIcon: Icon(Icons.person_2_outlined),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Ingrese su Correo: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextField(
+                  controller: _controllerEmail,
+                  decoration: const InputDecoration(
+                    suffixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Ingrese su Contraseña: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextField(
+                  controller: _controllerPassword,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffix: IconButton(
+                        icon: Icon(
+                          _obscureText1
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText1 = !_obscureText1;
+                          });
+                        },
+                      )),
+                  obscureText: _obscureText1,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Confirme su contraseña: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextField(
+                  controller: _controllerConfirmPassword,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffix: IconButton(
+                        icon: Icon(
+                          _obscureText2
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText2 = !_obscureText2;
+                          });
+                        },
+                      )),
+                  obscureText: _obscureText2,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Ingrese su foto de perfil: ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => pickImage(fromCamarera: true),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                      ),
+                    ),
+                    SizedBox(width: 16.0),
+                    ElevatedButton(
+                      onPressed: () => pickImage(fromCamarera: false),
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.white,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                _image == null
+                    ? Center(
+                        child: Text('No se ha seleccionado ninguna imagen.'))
+                    : Image.file(_image!),
+                SizedBox(height: 16.0),
+              ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Ya tienes una cuenta?',
+                    '¿Ya tienes una cuenta?',
                   ),
                   TextButton(
                     onPressed: () {
@@ -299,27 +343,29 @@ class _RegistroState extends State<Registro> {
                   ),
                 ],
               ),
-              SizedBox(height: 24,),
+              SizedBox(
+                height: 24,
+              ),
               ElevatedButton(
-                onPressed: (){},
-                child: Text('Registrarse',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white
-                  ),
+                onPressed: () {
+                  registroUsuario();
+                },
+                child: Text(
+                  'Registrarse',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(Colors.black),
-                side: WidgetStateProperty.all(
-                    const BorderSide(color: Colors.black, width: 2)),
-                padding: WidgetStateProperty.all(
-                  const EdgeInsets.symmetric(horizontal: 110, vertical: 20),
-                ),
-                shape: WidgetStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
+                  side: WidgetStateProperty.all(
+                      const BorderSide(color: Colors.black, width: 2)),
+                  padding: WidgetStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 110, vertical: 20),
                   ),
-                ),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                  ),
                 ),
               ),
             ],

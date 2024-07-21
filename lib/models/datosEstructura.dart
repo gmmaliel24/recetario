@@ -50,7 +50,7 @@ class Receta {
       'procedimientoReceta': procedimientoReceta,
       'ingredientesReceta': ingredientesReceta.join(','),
       'tiempoReceta': tiempoReceta,
-      'categoriaReceta' : categoriaReceta,
+      'categoriaReceta': categoriaReceta,
     };
   }
 
@@ -127,86 +127,3 @@ class Usuario {
     );
   }
 }
-
-/*
-class Instrucciones {
-  final int? idInstruccuiones;
-  final String descripcionInstrucciones;
-  final int numeroInstrucciones;
-
-  Instrucciones({
-    this.idInstruccuiones,
-    required this.numeroInstrucciones,
-    required this.descripcionInstrucciones,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'idInstrucciones': idInstruccuiones,
-      'numeroInstrucciones': numeroInstrucciones,
-      'descripcionInstrucciones': descripcionInstrucciones,
-    };
-  }
-
-  factory Instrucciones.fromMap(Map<String, dynamic> map) {
-    return Instrucciones(
-        idInstruccuiones: map['idInstrucciones'],
-        numeroInstrucciones: map['numeroInstrucciones'],
-        descripcionInstrucciones: map['descripcionInstrucciones']);
-  }
-}
-
-class Ingredientes {
-  final int? idIngrediente;
-  final String nombreIngrediente;
-  final int cantidadIngrediente;
-
-  const Ingredientes(
-      {this.idIngrediente,
-      required this.nombreIngrediente,
-      required this.cantidadIngrediente});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'idIngrediente': idIngrediente,
-      'nombreIngrediente': nombreIngrediente,
-      'cantidadIngrediente': cantidadIngrediente,
-    };
-  }
-
-  factory Ingredientes.fromMap(Map<String, dynamic> map) {
-    return Ingredientes(
-        idIngrediente: map['idIgrediente'],
-      nombreIngrediente: map['nombreIngrediente'],
-      cantidadIngrediente: map['cantidadIngrediente'],
-    );
-  }
-}
-
-class Categoria {
-  final int? idCategoria;
-  final String nombreCategoria;
-  final String descripcionCategoria;
-
-  const Categoria({
-    this.idCategoria,
-    required this.nombreCategoria,
-    required this.descripcionCategoria,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'idCategoria': idCategoria,
-      'nombreCategoria': nombreCategoria,
-      'descripcionCategoria': descripcionCategoria,
-    };
-  }
-
-  factory Categoria.fromMap(Map<String, dynamic> map) {
-    return Categoria(
-      idCategoria: map['idCategoria'],
-      nombreCategoria: map['nombreCategoria'],
-      descripcionCategoria: map['descripcionCategoria'],
-    );
-  }
-  */
