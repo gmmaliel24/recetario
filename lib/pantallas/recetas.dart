@@ -14,8 +14,7 @@ class RecetasUsuario extends StatefulWidget {
 }
 
 class _RecetasUsuario extends State<RecetasUsuario> {
-  final d
-n
+  
   TextEditingController buscadorController = TextEditingController();
 
   @override
@@ -75,9 +74,9 @@ n
                     },
                   )),
               // ver lista de las recetas
-              ListView.builder(itemBuilder: (context, index){
+              //ListView.builder(itemBuilder: (context, index){
                 
-              },),
+              //},),
               // boton de busqueda
               Padding(
                 padding: EdgeInsets.all(20),
