@@ -1,34 +1,46 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
 
-class AgregaRreceta extends StatefulWidget {
+class EditarReceta extends StatefulWidget {
+  final Receta receta;
+
+  EditarReceta({required this.receta});
+
   @override
-  _AgregarRecetaState createState() => _AgregarRecetaState();
+  _EditarRecetaState createState() => _EditarRecetaState();
 }
 
-class _AgregarRecetaState extends State<AgregaRreceta> {
+class _EditarRecetaState extends State<EditarReceta> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _controllerNombreReceta = TextEditingController();
-  final TextEditingController _controllerDescripcionReceta =
-      TextEditingController();
-  final TextEditingController _controllerIngredientesReceta =
-      TextEditingController();
-  final TextEditingController _controllerInstruccionesReceta =
-      TextEditingController();
-  final TextEditingController _controllerTiempoReceta = TextEditingController();
-  final TextEditingController _controllerCategoriaReceta =
-      TextEditingController();
+  late TextEditingController _controllerNombreReceta;
+  late TextEditingController _controllerDescripcionReceta;
+  late TextEditingController _controllerIngredientesReceta;
+  late TextEditingController _controllerInstruccionesReceta;
+  late TextEditingController _controllerTiempoReceta;
+  late TextEditingController _controllerCategoriaReceta;
   File? _imageReceta;
 
-  Future<void> pickImage({required bool fromCamarera}) async {
+  @override
+  void initState() {
+    super.initState();
+    _controllerNombreReceta = TextEditingController(text: widget.receta.nombreReceta);
+    _controllerDescripcionReceta = TextEditingController(text: widget.receta.descripcionReceta);
+    _controllerIngredientesReceta = TextEditingController(text: widget.receta.ingredientesReceta.join(', '));
+    _controllerInstruccionesReceta = TextEditingController(text: widget.receta.procedimientoReceta);
+    _controllerTiempoReceta = TextEditingController(text: widget.receta.tiempoReceta.toString());
+    _controllerCategoriaReceta = TextEditingController(text: widget.receta.categoriaReceta);
+    _imageReceta = File(widget.receta.fotoReceta);
+  }
+
+  Future<void> pickImage({required bool fromCamera}) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(
-          source: fromCamarera ? ImageSource.camera : ImageSource.gallery);
+      final pickedFile = await picker.pickImage(source: fromCamera ? ImageSource.camera : ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {
@@ -36,57 +48,52 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error al seleccionar la imagen')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al seleccionar la imagen')));
     }
   }
 
-  void _guardarReceta() async {
+  void _editarReceta() async {
     try {
       String nombreReceta = _controllerNombreReceta.text;
       String descripcionReceta = _controllerDescripcionReceta.text;
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
       String tiempoReceta = _controllerTiempoReceta.text;
-      String categoriaReceta = "pan";
+      String categoriaReceta = _controllerCategoriaReceta.text;
       File? imagen = _imageReceta;
 
       if (nombreReceta.isEmpty ||
           descripcionReceta.isEmpty ||
           ingredientesReceta.isEmpty ||
           instruccionesReceta.isEmpty ||
-          tiempoReceta == 0 ||
+          tiempoReceta.isEmpty ||
           imagen == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Por favor llene todos los campos')));
-      } else {
-        final directory = await getApplicationDocumentsDirectory();
-        final path = directory.path;
-        final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
-        final localImage = await imagen.copy('$path/$imageName');
-        final receta = Receta(
-            nombreReceta: nombreReceta,
-            descripcionReceta: descripcionReceta,
-            fotoReceta: localImage.path,
-            procedimientoReceta: instruccionesReceta,
-            ingredientesReceta: ingredientesReceta.split(','),
-            tiempoReceta: int.parse(tiempoReceta),
-            categoriaReceta: categoriaReceta);
-
-        await RecetaBasesDeDatos.inserReceta(receta);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Receta Guardada Con Éxito"),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor llene todos los campos')));
+        return;
       }
+
+      final directory = await getApplicationDocumentsDirectory();
+      final path = directory.path;
+      final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
+      final localImage = await imagen.copy('$path/$imageName');
+      
+      final receta = Receta(
+        idReceta: widget.receta.idReceta,
+        nombreReceta: nombreReceta,
+        descripcionReceta: descripcionReceta,
+        fotoReceta: localImage.path,
+        procedimientoReceta: instruccionesReceta,
+        ingredientesReceta: ingredientesReceta.split(',').map((e) => e.trim()).toList(),
+        tiempoReceta: int.parse(tiempoReceta),
+        categoriaReceta: categoriaReceta,
+      );
+
+      await RecetaBasesDeDatos.updateReceta(receta);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Receta Guardada Con Éxito")));
+      Navigator.of(context).pop(); // Close the edit screen
     } catch (e) {
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error al Guardar la Receta'),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al Guardar la Receta')));
     }
   }
 
@@ -97,7 +104,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         backgroundColor: Colors.black,
         title: const Center(
           child: Text(
-            'Escribir Receta',
+            'Editar Receta',
             style: TextStyle(
               color: Colors.white,
               fontSize: 25.0,
@@ -106,11 +113,11 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         ),
         actions: [
           ElevatedButton(
-            onPressed: _guardarReceta,
+            onPressed: _editarReceta,
             child: const Row(
               children: [
                 Text(
-                  'Guardar  ',
+                  'Guardar',
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -122,15 +129,14 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
               ],
             ),
             style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.white)),
+                backgroundColor: MaterialStateProperty.all(Colors.white)),
           ),
           SizedBox(width: 20,)
         ],
       ),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -198,11 +204,11 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                   child: TextFormField(
                     controller: _controllerTiempoReceta,
                     decoration: const InputDecoration(
-                        labelText: 'Ingrese el tiempo de preparacion (minutos)'),
+                        labelText: 'Ingrese el tiempo de preparación (minutos)'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por Favor ingrese el tiempo de preparacion en minutos';
+                        return 'Por Favor ingrese el tiempo de preparación en minutos';
                       }
                       return null;
                     },
@@ -213,24 +219,24 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => pickImage(fromCamarera: true),
+                      onPressed: () => pickImage(fromCamera: true),
                       child: Icon(
                         Icons.camera_alt,
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
                       ),
                     ),
                     const SizedBox(width: 16.0),
                     ElevatedButton(
-                      onPressed: () => pickImage(fromCamarera: false),
+                      onPressed: () => pickImage(fromCamera: false),
                       child: Icon(
                         Icons.image,
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
                       ),
                     ),
                   ],

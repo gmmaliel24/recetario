@@ -109,7 +109,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                   leading: const Icon(Icons.logout),
                   title: const Text('Cerrar sesión'),
                   onTap: () {
-                    Navigator.of(context).pushReplacementNamed('iniarSesion');
+                    Navigator.of(context).pushReplacementNamed('homePage');
                   },
                 ),
               ],
