@@ -47,6 +47,7 @@ class _RecetasUsuario extends State<RecetasUsuario> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              // barra de busqueda
               Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: TextField(
@@ -64,16 +65,19 @@ class _RecetasUsuario extends State<RecetasUsuario> {
                       _busquedaCategoria(value);
                     },
                   )),
+              // ver lista de las recetas
+
+              // boton de busqueda
               Padding(
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        /*Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AgregaRreceta()));*/
+                                builder: (context) => AgregaRreceta()));
                       },
                       child: Icon(
                         Icons.add,
