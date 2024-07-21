@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
 import 'package:proyecto_recetario/pantallas/agregarReceta.dart';
+import 'package:proyecto_recetario/pantallas/editarReceta.dart';
 import 'package:proyecto_recetario/widgets/drawerMenu.dart';
 
 class RecetasUsuario extends StatefulWidget {
