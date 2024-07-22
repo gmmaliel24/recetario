@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
 import 'package:proyecto_recetario/pantallas/agregarReceta.dart';
-import 'package:proyecto_recetario/pantallas/editarReceta.dart';
 import 'package:proyecto_recetario/widgets/drawerMenu.dart';
 
 class RecetasUsuario extends StatefulWidget {
-  final dynamic id;
+  final int id;
 
   const RecetasUsuario({super.key, required this.id});
 
@@ -45,7 +44,9 @@ class _RecetasUsuario extends State<RecetasUsuario> {
 
   Future<void> _cargarTodasRecetas() async {
     try {
-      final recetas = await RecetaBasesDeDatos.readAllReceta();
+      final recetas = await RecetaBasesDeDatos.readRecetasUsuario(
+        widget.id,
+      );
       setState(() {
         _recetas = recetas;
         _recetasFiltradas = recetas;
@@ -161,7 +162,9 @@ class _RecetasUsuario extends State<RecetasUsuario> {
           bool? result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AgregaRreceta(),
+              builder: (context) => AgregaRreceta(
+                idUsuario: widget.id,
+              ),
             ),
           );
           if (result != null && result) {

@@ -7,6 +7,7 @@ class Receta {
   final List<String> ingredientesReceta;
   final int tiempoReceta;
   final String categoriaReceta;
+  final int? idUsuario;
 
   Receta({
     this.idReceta,
@@ -17,6 +18,7 @@ class Receta {
     required this.ingredientesReceta,
     required this.tiempoReceta,
     required this.categoriaReceta,
+    required this.idUsuario,
   });
 
   Receta copy({
@@ -28,6 +30,7 @@ class Receta {
     String? procedimientoReceta,
     int? tiempoReceta,
     String? categoriaReceta,
+    int? idUsuario,
   }) {
     return Receta(
       idReceta: idReceta ?? this.idReceta,
@@ -38,6 +41,7 @@ class Receta {
       procedimientoReceta: procedimientoReceta ?? this.procedimientoReceta,
       tiempoReceta: tiempoReceta ?? this.tiempoReceta,
       categoriaReceta: categoriaReceta ?? this.categoriaReceta,
+      idUsuario: idUsuario ?? this.idUsuario,
     );
   }
 
@@ -51,6 +55,7 @@ class Receta {
       'ingredientesReceta': ingredientesReceta.join(','),
       'tiempoReceta': tiempoReceta,
       'categoriaReceta': categoriaReceta,
+      'idUsuario': idUsuario,
     };
   }
 
@@ -65,6 +70,7 @@ class Receta {
           List<String>.from(map['ingredientesReceta'].split(',')),
       tiempoReceta: map['tiempoReceta'],
       categoriaReceta: map['categoriaReceta'],
+      idUsuario: map['idUsuario'],
     );
   }
 }

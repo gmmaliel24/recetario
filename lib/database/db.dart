@@ -14,8 +14,10 @@ class RecetaBasesDeDatos {
           "CREATE TABLE Usuario(idUsuario INTEGER NOT NULL CONSTRAINT PK_Usuario PRIMARY KEY AUTOINCREMENT, nombreUsuario TEXT, apellidoUsuario TEXT, correoUsuario TEXT, contraseniaUsuario TEXT, fotoUsuario TEXT);",
         );
         await db.execute(
-          "CREATE TABLE Receta(idReceta INTEGER NOT NULL CONSTRAINT PK_Receta PRIMARY KEY AUTOINCREMENT, nameReceta TEXT, descripcionReceta TEXT, pathFotoReceta TEXT, procedimientoReceta TEXT, ingredientesReceta TEXT, tiempoReceta int, categoriaReceta TEXT, idUsuario INTEGER, CONSTRAINT Relationship5 FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario)); CREATE INDEX IX_Relationship5 ON Receta (idUsuario);",
+          "CREATE TABLE Receta(idReceta INTEGER NOT NULL CONSTRAINT PK_Receta PRIMARY KEY AUTOINCREMENT, nameReceta TEXT, descripcionReceta TEXT, pathFotoReceta TEXT, procedimientoReceta TEXT, ingredientesReceta TEXT, tiempoReceta int, categoriaReceta TEXT, idUsuario INTEGER, CONSTRAINT Relationship5 FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario));",
         );
+        await db
+            .execute("CREATE INDEX IX_Relationship5 ON Receta (idUsuario);");
       },
       version: 1,
     );
@@ -102,6 +104,18 @@ class RecetaBasesDeDatos {
     return receta.copy(idReceta: id);
   }
 
+  static Future<List<Receta>> readRecetasUsuario(int userId) async {
+    final db = await initializadeDB();
+    final maps = await db.query(
+      'Receta',
+      where: 'idUsuario = ?',
+      whereArgs: [userId],
+      orderBy: 'nameReceta ASC',
+    );
+
+    return maps.map((json) => Receta.fromMap(json)).toList();
+  }
+
   static Future<Receta?> readReceta(int id) async {
     final db = await initializadeDB();
     final maps = await db.query(
@@ -116,7 +130,7 @@ class RecetaBasesDeDatos {
         'tiempoReceta',
         'categoriaReceta',
       ],
-      where: 'idReceta=?+',
+      where: 'idReceta=?',
       whereArgs: [id],
     );
     if (maps.isNotEmpty) {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,11 +8,15 @@ import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
 
 class AgregaRreceta extends StatefulWidget {
+  final dynamic idUsuario;
+
+  AgregaRreceta({super.key, required this.idUsuario});
+
   @override
-  _AgregarRecetaState createState() => _AgregarRecetaState();
+  _AgregaRrecetaState createState() => _AgregaRrecetaState();
 }
 
-class _AgregarRecetaState extends State<AgregaRreceta> {
+class _AgregaRrecetaState extends State<AgregaRreceta> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerNombreReceta = TextEditingController();
   final TextEditingController _controllerDescripcionReceta =
@@ -65,13 +71,15 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
         final localImage = await imagen.copy('$path/$imageName');
         final receta = Receta(
-            nombreReceta: nombreReceta,
-            descripcionReceta: descripcionReceta,
-            fotoReceta: localImage.path,
-            procedimientoReceta: instruccionesReceta,
-            ingredientesReceta: ingredientesReceta.split(','),
-            tiempoReceta: int.parse(tiempoReceta),
-            categoriaReceta: categoriaReceta);
+          nombreReceta: nombreReceta,
+          descripcionReceta: descripcionReceta,
+          fotoReceta: localImage.path,
+          procedimientoReceta: instruccionesReceta,
+          ingredientesReceta: ingredientesReceta.split(','),
+          tiempoReceta: int.parse(tiempoReceta),
+          categoriaReceta: categoriaReceta,
+          idUsuario: widget.idUsuario,
+        );
 
         await RecetaBasesDeDatos.inserReceta(receta);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -83,7 +91,7 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         Navigator.of(context).pop(true);
       }
     } catch (e) {
-      print(e);
+      print('error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Error al Guardar la Receta'),
@@ -109,9 +117,9 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
         actions: [
           ElevatedButton(
             onPressed: _guardarReceta,
-            child: const Row(
+            child: Row(
               children: [
-                Text(
+                const Text(
                   'Guardar  ',
                   style: TextStyle(
                     color: Colors.black,
@@ -126,7 +134,9 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
             style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Colors.white)),
           ),
-          SizedBox(width: 20,)
+          SizedBox(
+            width: 20,
+          )
         ],
       ),
       backgroundColor: Colors.white,
@@ -200,7 +210,8 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                   child: TextFormField(
                     controller: _controllerTiempoReceta,
                     decoration: const InputDecoration(
-                        labelText: 'Ingrese el tiempo de preparacion (minutos)'),
+                        labelText:
+                            'Ingrese el tiempo de preparacion (minutos)'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -240,7 +251,10 @@ class _AgregarRecetaState extends State<AgregaRreceta> {
                 const SizedBox(height: 16.0),
                 _imageReceta == null
                     ? const Center(
-                        child: Text('No se ha seleccionado ninguna imagen.', style: TextStyle(fontSize: 16),))
+                        child: Text(
+                        'No se ha seleccionado ninguna imagen.',
+                        style: TextStyle(fontSize: 16),
+                      ))
                     : Image.file(_imageReceta!),
                 const SizedBox(height: 16.0),
               ],

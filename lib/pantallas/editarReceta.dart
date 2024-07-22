@@ -28,19 +28,26 @@ class _EditarRecetaState extends State<EditarReceta> {
   @override
   void initState() {
     super.initState();
-    _controllerNombreReceta = TextEditingController(text: widget.receta.nombreReceta);
-    _controllerDescripcionReceta = TextEditingController(text: widget.receta.descripcionReceta);
-    _controllerIngredientesReceta = TextEditingController(text: widget.receta.ingredientesReceta.join(', '));
-    _controllerInstruccionesReceta = TextEditingController(text: widget.receta.procedimientoReceta);
-    _controllerTiempoReceta = TextEditingController(text: widget.receta.tiempoReceta.toString());
-    _controllerCategoriaReceta = TextEditingController(text: widget.receta.categoriaReceta);
+    _controllerNombreReceta =
+        TextEditingController(text: widget.receta.nombreReceta);
+    _controllerDescripcionReceta =
+        TextEditingController(text: widget.receta.descripcionReceta);
+    _controllerIngredientesReceta = TextEditingController(
+        text: widget.receta.ingredientesReceta.join(', '));
+    _controllerInstruccionesReceta =
+        TextEditingController(text: widget.receta.procedimientoReceta);
+    _controllerTiempoReceta =
+        TextEditingController(text: widget.receta.tiempoReceta.toString());
+    _controllerCategoriaReceta =
+        TextEditingController(text: widget.receta.categoriaReceta);
     _imageReceta = File(widget.receta.fotoReceta);
   }
 
   Future<void> pickImage({required bool fromCamera}) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(source: fromCamera ? ImageSource.camera : ImageSource.gallery);
+      final pickedFile = await picker.pickImage(
+          source: fromCamera ? ImageSource.camera : ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {
@@ -48,7 +55,8 @@ class _EditarRecetaState extends State<EditarReceta> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al seleccionar la imagen')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al seleccionar la imagen')));
     }
   }
 
@@ -68,7 +76,8 @@ class _EditarRecetaState extends State<EditarReceta> {
           instruccionesReceta.isEmpty ||
           tiempoReceta.isEmpty ||
           imagen == null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor llene todos los campos')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Por favor llene todos los campos')));
         return;
       }
 
@@ -76,24 +85,28 @@ class _EditarRecetaState extends State<EditarReceta> {
       final path = directory.path;
       final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
       final localImage = await imagen.copy('$path/$imageName');
-      
+
       final receta = Receta(
         idReceta: widget.receta.idReceta,
         nombreReceta: nombreReceta,
         descripcionReceta: descripcionReceta,
         fotoReceta: localImage.path,
         procedimientoReceta: instruccionesReceta,
-        ingredientesReceta: ingredientesReceta.split(',').map((e) => e.trim()).toList(),
+        ingredientesReceta:
+            ingredientesReceta.split(',').map((e) => e.trim()).toList(),
         tiempoReceta: int.parse(tiempoReceta),
         categoriaReceta: categoriaReceta,
+        idUsuario: widget.receta.idUsuario,
       );
 
       await RecetaBasesDeDatos.updateReceta(receta);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Receta Guardada Con Éxito")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Receta Guardada Con Éxito")));
       Navigator.of(context).pop(); // Close the edit screen
     } catch (e) {
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al Guardar la Receta')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al Guardar la Receta')));
     }
   }
 
@@ -131,7 +144,9 @@ class _EditarRecetaState extends State<EditarReceta> {
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white)),
           ),
-          SizedBox(width: 20,)
+          SizedBox(
+            width: 20,
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -204,7 +219,8 @@ class _EditarRecetaState extends State<EditarReceta> {
                   child: TextFormField(
                     controller: _controllerTiempoReceta,
                     decoration: const InputDecoration(
-                        labelText: 'Ingrese el tiempo de preparación (minutos)'),
+                        labelText:
+                            'Ingrese el tiempo de preparación (minutos)'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -225,7 +241,8 @@ class _EditarRecetaState extends State<EditarReceta> {
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.black),
                       ),
                     ),
                     const SizedBox(width: 16.0),
@@ -236,7 +253,8 @@ class _EditarRecetaState extends State<EditarReceta> {
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.black),
                       ),
                     ),
                   ],
@@ -244,7 +262,10 @@ class _EditarRecetaState extends State<EditarReceta> {
                 const SizedBox(height: 16.0),
                 _imageReceta == null
                     ? const Center(
-                        child: Text('No se ha seleccionado ninguna imagen.', style: TextStyle(fontSize: 16),))
+                        child: Text(
+                        'No se ha seleccionado ninguna imagen.',
+                        style: TextStyle(fontSize: 16),
+                      ))
                     : Image.file(_imageReceta!),
                 const SizedBox(height: 16.0),
               ],
