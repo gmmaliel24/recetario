@@ -100,9 +100,11 @@ class _EditarRecetaState extends State<EditarReceta> {
       );
 
       await RecetaBasesDeDatos.updateReceta(receta);
+
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Receta Guardada Con Éxito")));
-      Navigator.of(context).pop(); // Close the edit screen
+      Navigator.of(context)
+          .pop(true); // Retornar true para indicar que se guardó la receta
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
