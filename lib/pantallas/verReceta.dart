@@ -21,6 +21,7 @@ class VerReceta extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -85,7 +86,9 @@ class VerReceta extends StatelessWidget {
                 ),
               ),
               Text(receta.categoriaReceta),
-              SizedBox(height: 50,)
+              SizedBox(
+                height: 50,
+              )
             ],
           ),
         ),

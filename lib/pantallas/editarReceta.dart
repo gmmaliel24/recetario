@@ -151,6 +151,7 @@ class _EditarRecetaState extends State<EditarReceta> {
           )
         ],
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
