@@ -43,19 +43,19 @@ class _MenuUsuarioState extends State<MenuUsuario> {
     try {
       if (imgString.isNotEmpty) {
         return CircleAvatar(
-          radius: 70,
+          radius: 50,
           backgroundImage: FileImage(File(imgString)),
         );
       } else {
         return const CircleAvatar(
           backgroundImage: NetworkImage(
               'https://cdn.pixabay.com/photo/2021/11/24/05/19/user-6820232_960_720.png'),
-          radius: 70,
+          radius: 50,
         );
       }
     } catch (e) {
       return CircleAvatar(
-        radius: 70,
+        radius: 50,
         backgroundImage: MemoryImage(base64Decode(imgString)),
       );
     }
@@ -69,6 +69,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
       );
     } else {
       return Drawer(
+        width: 350,
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
