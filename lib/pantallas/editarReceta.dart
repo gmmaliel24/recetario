@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class EditarReceta extends StatefulWidget {
   final Receta receta;
@@ -22,8 +23,17 @@ class _EditarRecetaState extends State<EditarReceta> {
   late TextEditingController _controllerIngredientesReceta;
   late TextEditingController _controllerInstruccionesReceta;
   late TextEditingController _controllerTiempoReceta;
-  late TextEditingController _controllerCategoriaReceta;
   File? _imageReceta;
+  final List<String> items = [
+    'Desayuno',
+    'Almuerzo',
+    'Cena',
+    'Postre',
+    'Refacción',
+    'Bebida Fría',
+    'Bebida Caliente',
+  ];
+  String? selectedValued;
 
   @override
   void initState() {
@@ -38,8 +48,7 @@ class _EditarRecetaState extends State<EditarReceta> {
         TextEditingController(text: widget.receta.procedimientoReceta);
     _controllerTiempoReceta =
         TextEditingController(text: widget.receta.tiempoReceta.toString());
-    _controllerCategoriaReceta =
-        TextEditingController(text: widget.receta.categoriaReceta);
+    selectedValued = widget.receta.categoriaReceta;
     _imageReceta = File(widget.receta.fotoReceta);
   }
 
@@ -94,7 +103,7 @@ class _EditarRecetaState extends State<EditarReceta> {
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
       String tiempoReceta = _controllerTiempoReceta.text;
-      String categoriaReceta = _controllerCategoriaReceta.text;
+      String? categoriaReceta = selectedValued;
       File? imagen = _imageReceta;
 
       if (nombreReceta.isEmpty ||
@@ -218,6 +227,29 @@ class _EditarRecetaState extends State<EditarReceta> {
                       }
                       return null;
                     },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Seleccionar Categoria',
+                      ),
+                      items: items
+                          .map((String item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              ))
+                          .toList(),
+                      value: selectedValued,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedValued = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Padding(

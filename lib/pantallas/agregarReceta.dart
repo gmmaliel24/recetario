@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class AgregaRreceta extends StatefulWidget {
   final dynamic idUsuario;
@@ -25,9 +26,18 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
   final TextEditingController _controllerInstruccionesReceta =
       TextEditingController();
   final TextEditingController _controllerTiempoReceta = TextEditingController();
-  final TextEditingController _controllerCategoriaReceta =
-      TextEditingController();
   File? _imageReceta;
+
+  final List<String> items = [
+    'Desayuno',
+    'Almuerzo',
+    'Cena',
+    'Postre',
+    'Refacción',
+    'Bebida Fría',
+    'Bebida Caliente',
+  ];
+  String? selectedValued;
 
   Future<void> pickImage({required bool fromCamarera}) async {
     try {
@@ -53,7 +63,7 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
       String tiempoReceta = _controllerTiempoReceta.text;
-      String categoriaReceta = _controllerCategoriaReceta.text;
+      String? categoriaReceta = selectedValued;
       File? imagen = _imageReceta;
 
       if (nombreReceta.isEmpty ||
@@ -179,6 +189,29 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
                   ),
                 ),
                 Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Seleccionar Categoria',
+                      ),
+                      items: items
+                          .map((String item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              ))
+                          .toList(),
+                      value: selectedValued,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedValued = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                /*Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
                     controller: _controllerCategoriaReceta,
@@ -192,7 +225,7 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
                       return null;
                     },
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(

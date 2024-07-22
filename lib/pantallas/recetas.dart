@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:proyecto_recetario/database/db.dart';
 import 'package:proyecto_recetario/models/datosEstructura.dart';
@@ -35,7 +34,7 @@ class _RecetasUsuario extends State<RecetasUsuario> {
         _recetasFiltradas = _recetas;
       } else {
         _recetasFiltradas = _recetas.where((receta) {
-          return receta.categoriaReceta
+          return receta.categoriaReceta!
               .toLowerCase()
               .contains(query.toLowerCase());
         }).toList();

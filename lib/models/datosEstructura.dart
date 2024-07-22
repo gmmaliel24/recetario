@@ -6,7 +6,7 @@ class Receta {
   final String procedimientoReceta;
   final List<String> ingredientesReceta;
   final int tiempoReceta;
-  final String categoriaReceta;
+  final String? categoriaReceta;
   final int estado;
   final int? idUsuario;
 

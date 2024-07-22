@@ -87,7 +87,7 @@ class VerReceta extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(receta.categoriaReceta),
+              Text(receta.categoriaReceta!),
               SizedBox(
                 height: 50,
               )
