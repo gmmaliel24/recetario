@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_recetario/pantallas/inicio_sesion.dart';
 import 'package:proyecto_recetario/pantallas/pantallaInicio.dart';
+import 'package:proyecto_recetario/pantallas/recetas.dart';
 import 'package:proyecto_recetario/pantallas/registro.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         'homePage': (context) => Pantallainicio(),
         'iniarSesion': (context) => InicioSesion(),
         'registrarse': (context) => Registro(),
+        'inicio': (context) => RecetasUsuario(id: null,),
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
