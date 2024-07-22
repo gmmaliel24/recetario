@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
+import 'package:awesome_select/awesome_select.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +17,15 @@ class AgregaRreceta extends StatefulWidget {
 }
 
 class _AgregaRrecetaState extends State<AgregaRreceta> {
+  String value = 'Categoria';
+  List<S2Choice<String>> categorias = [
+    S2Choice<String>(value: 'Desayuno', title: 'Desayuno'),
+    S2Choice<String>(value: 'Almuerzo', title: 'Almuerzo'),
+    S2Choice<String>(value: 'Cena', title: 'Cena'),
+    S2Choice<String>(value: 'Postre', title: 'Postre'),
+    S2Choice<String>(value: 'Bebida', title: 'Bebida'),
+    S2Choice<String>(value: 'Panes', title: 'Panes'),
+  ];
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerNombreReceta = TextEditingController();
   final TextEditingController _controllerDescripcionReceta =
@@ -54,7 +63,7 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
       String ingredientesReceta = _controllerIngredientesReceta.text;
       String instruccionesReceta = _controllerInstruccionesReceta.text;
       String tiempoReceta = _controllerTiempoReceta.text;
-      String categoriaReceta = "pan";
+      String categoriaReceta = value;
       File? imagen = _imageReceta;
 
       if (nombreReceta.isEmpty ||
@@ -104,10 +113,13 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         backgroundColor: Colors.black,
         title: const Center(
           child: Text(
-            'Escribir Receta',
+            'Agregar Receta',
             style: TextStyle(
               color: Colors.white,
               fontSize: 25.0,
@@ -173,6 +185,17 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
                       }
                       return null;
                     },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SmartSelect<String>.single(
+                    title: 'Categoria',
+                    selectedValue: value,
+                    choiceItems: categorias,
+                    onChange: (state) => setState(() {
+                      value = state.value;
+                    }),
                   ),
                 ),
                 Padding(

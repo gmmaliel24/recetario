@@ -43,19 +43,19 @@ class _MenuUsuarioState extends State<MenuUsuario> {
     try {
       if (imgString.isNotEmpty) {
         return CircleAvatar(
-          radius: 70,
+          radius: 50,
           backgroundImage: FileImage(File(imgString)),
         );
       } else {
         return const CircleAvatar(
           backgroundImage: NetworkImage(
               'https://cdn.pixabay.com/photo/2021/11/24/05/19/user-6820232_960_720.png'),
-          radius: 70,
+          radius: 50,
         );
       }
     } catch (e) {
       return CircleAvatar(
-        radius: 70,
+        radius: 50,
         backgroundImage: MemoryImage(base64Decode(imgString)),
       );
     }
@@ -69,6 +69,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
       );
     } else {
       return Drawer(
+        width: 350,
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
@@ -109,7 +110,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                   leading: const Icon(Icons.logout),
                   title: const Text('Cerrar sesión'),
                   onTap: () {
-                    Navigator.of(context).pushReplacementNamed('homePage');
+                    alerta(context);
                   },
                 ),
               ],
@@ -118,23 +119,56 @@ class _MenuUsuarioState extends State<MenuUsuario> {
         ),
       );
     }
+  }
 
-    /*Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(auxUser?.fotoUsuario ??
-                    'https://cdn.pixabay.com/photo/2021/11/24/05/19/user-6820232_960_720.png'),
-                radius: 70,
+  void alerta(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(
+            child: Text(
+              '¡Alerta!',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ),
+          content: const Text(
+            '¡¡Estas Intentando Cerrar Sesión!!\n¿Estas seguro de que deseas cerrar sesión?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    'homePage', (Route<dynamic> route) => false);
+              },
+              child: const Text(
+                'Cerrar Sesión',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
-      */
   }
 }
