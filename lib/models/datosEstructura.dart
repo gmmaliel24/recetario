@@ -7,6 +7,7 @@ class Receta {
   final List<String> ingredientesReceta;
   final int tiempoReceta;
   final String categoriaReceta;
+  final int estado;
   final int? idUsuario;
 
   Receta({
@@ -18,6 +19,7 @@ class Receta {
     required this.ingredientesReceta,
     required this.tiempoReceta,
     required this.categoriaReceta,
+    required this.estado,
     required this.idUsuario,
   });
 
@@ -30,6 +32,7 @@ class Receta {
     String? procedimientoReceta,
     int? tiempoReceta,
     String? categoriaReceta,
+    int? estado,
     int? idUsuario,
   }) {
     return Receta(
@@ -41,6 +44,7 @@ class Receta {
       procedimientoReceta: procedimientoReceta ?? this.procedimientoReceta,
       tiempoReceta: tiempoReceta ?? this.tiempoReceta,
       categoriaReceta: categoriaReceta ?? this.categoriaReceta,
+      estado: estado ?? this.estado,
       idUsuario: idUsuario ?? this.idUsuario,
     );
   }
@@ -55,6 +59,7 @@ class Receta {
       'ingredientesReceta': ingredientesReceta.join(','),
       'tiempoReceta': tiempoReceta,
       'categoriaReceta': categoriaReceta,
+      'estado': estado,
       'idUsuario': idUsuario,
     };
   }
@@ -70,6 +75,7 @@ class Receta {
           List<String>.from(map['ingredientesReceta'].split(',')),
       tiempoReceta: map['tiempoReceta'],
       categoriaReceta: map['categoriaReceta'],
+      estado: map['estado'],
       idUsuario: map['idUsuario'],
     );
   }

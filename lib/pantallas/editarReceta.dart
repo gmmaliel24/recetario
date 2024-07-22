@@ -60,6 +60,33 @@ class _EditarRecetaState extends State<EditarReceta> {
     }
   }
 
+  void _eliminarReceta() async {
+    try {
+      final receta = Receta(
+        idReceta: widget.receta.idReceta,
+        nombreReceta: widget.receta.nombreReceta,
+        descripcionReceta: widget.receta.descripcionReceta,
+        fotoReceta: widget.receta.fotoReceta,
+        procedimientoReceta: widget.receta.procedimientoReceta,
+        ingredientesReceta: widget.receta.ingredientesReceta,
+        tiempoReceta: widget.receta.tiempoReceta,
+        categoriaReceta: widget.receta.categoriaReceta,
+        estado: 0,
+        idUsuario: widget.receta.idUsuario,
+      );
+      await RecetaBasesDeDatos.deleteReceta(receta);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Receta Eliminada Con Éxito")));
+      Navigator.of(context)
+          .pop(true); // Retornar true para indicar que se guardó la receta
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al Guardar la Receta')));
+    }
+  }
+
   void _editarReceta() async {
     try {
       String nombreReceta = _controllerNombreReceta.text;
@@ -96,6 +123,7 @@ class _EditarRecetaState extends State<EditarReceta> {
             ingredientesReceta.split(',').map((e) => e.trim()).toList(),
         tiempoReceta: int.parse(tiempoReceta),
         categoriaReceta: categoriaReceta,
+        estado: 1,
         idUsuario: widget.receta.idUsuario,
       );
 
@@ -131,25 +159,27 @@ class _EditarRecetaState extends State<EditarReceta> {
         ),
         actions: [
           ElevatedButton(
-            onPressed: _editarReceta,
-            child: const Row(
-              children: [
-                Text(
-                  'Guardar  ',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                Icon(
-                  Icons.save,
-                  color: Colors.black,
-                )
-              ],
+            onPressed: _eliminarReceta,
+            child: Icon(
+              Icons.delete,
+              color: Colors.black,
             ),
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white)),
+                backgroundColor: WidgetStateProperty.all(Colors.white)),
           ),
-          SizedBox(
+          const SizedBox(
+            width: 5.0,
+          ),
+          ElevatedButton(
+            onPressed: _editarReceta,
+            child: Icon(
+              Icons.save,
+              color: Colors.black,
+            ),
+            style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.white)),
+          ),
+          const SizedBox(
             width: 20,
           )
         ],
@@ -157,7 +187,7 @@ class _EditarRecetaState extends State<EditarReceta> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -247,8 +277,7 @@ class _EditarRecetaState extends State<EditarReceta> {
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black),
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
                       ),
                     ),
                     const SizedBox(width: 16.0),
@@ -259,8 +288,7 @@ class _EditarRecetaState extends State<EditarReceta> {
                         color: Colors.white,
                       ),
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black),
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
                       ),
                     ),
                   ],

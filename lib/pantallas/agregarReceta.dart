@@ -77,6 +77,7 @@ class _AgregaRrecetaState extends State<AgregaRreceta> {
           ingredientesReceta: ingredientesReceta.split(','),
           tiempoReceta: int.parse(tiempoReceta),
           categoriaReceta: categoriaReceta,
+          estado: 1,
           idUsuario: widget.idUsuario,
         );
 

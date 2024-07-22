@@ -6,7 +6,7 @@ import 'package:proyecto_recetario/models/datosEstructura.dart';
 
 class RecetaBasesDeDatos {
   static Future<Database> initializadeDB() async {
-    String path = join(await getDatabasesPath(), 'recetario.db');
+    String path = join(await getDatabasesPath(), 'recetarioIntecap.db');
     return openDatabase(
       path,
       onCreate: (db, version) async {
@@ -14,7 +14,7 @@ class RecetaBasesDeDatos {
           "CREATE TABLE Usuario(idUsuario INTEGER NOT NULL CONSTRAINT PK_Usuario PRIMARY KEY AUTOINCREMENT, nombreUsuario TEXT, apellidoUsuario TEXT, correoUsuario TEXT, contraseniaUsuario TEXT, fotoUsuario TEXT);",
         );
         await db.execute(
-          "CREATE TABLE Receta(idReceta INTEGER NOT NULL CONSTRAINT PK_Receta PRIMARY KEY AUTOINCREMENT, nameReceta TEXT, descripcionReceta TEXT, pathFotoReceta TEXT, procedimientoReceta TEXT, ingredientesReceta TEXT, tiempoReceta int, categoriaReceta TEXT, idUsuario INTEGER, CONSTRAINT Relationship5 FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario));",
+          "CREATE TABLE Receta(idReceta INTEGER NOT NULL CONSTRAINT PK_Receta PRIMARY KEY AUTOINCREMENT, nameReceta TEXT, descripcionReceta TEXT, pathFotoReceta TEXT, procedimientoReceta TEXT, ingredientesReceta TEXT, tiempoReceta int, categoriaReceta TEXT, estado INTEGER, idUsuario INTEGER, CONSTRAINT Relationship5 FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario));",
         );
         await db
             .execute("CREATE INDEX IX_Relationship5 ON Receta (idUsuario);");
@@ -108,7 +108,7 @@ class RecetaBasesDeDatos {
     final db = await initializadeDB();
     final maps = await db.query(
       'Receta',
-      where: 'idUsuario = ?',
+      where: 'estado = 1 AND idUsuario = ?',
       whereArgs: [userId],
       orderBy: 'nameReceta ASC',
     );
@@ -161,9 +161,15 @@ class RecetaBasesDeDatos {
   }
 
   //Borrar datos
-  static Future<int> deleteReceta(int id) async {
+  static Future<int> deleteReceta(Receta receta) async {
     final db = await initializadeDB();
-    return await db.delete('Receta', where: 'idReceta = ?', whereArgs: [id]);
+    return db.update(
+      'Receta',
+      receta.toMap(),
+      where: 'idReceta =?',
+      whereArgs: [receta.idReceta],
+    );
+    //return await db.delete('Receta', where: 'idReceta = ?', whereArgs: [id]);
   }
 
   //Cerrar base de datos
