@@ -116,6 +116,9 @@ class _EditarRecetaState extends State<EditarReceta> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         backgroundColor: Colors.black,
         title: const Center(
           child: Text(
@@ -132,7 +135,7 @@ class _EditarRecetaState extends State<EditarReceta> {
             child: const Row(
               children: [
                 Text(
-                  'Guardar',
+                  'Guardar  ',
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -151,6 +154,7 @@ class _EditarRecetaState extends State<EditarReceta> {
           )
         ],
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
