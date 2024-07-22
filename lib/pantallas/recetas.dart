@@ -82,11 +82,11 @@ class _RecetasUsuario extends State<RecetasUsuario> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        title: Text(
-          'TastyRecipes ${widget.id}',
+        title: const Text(
+          'TastyRecipes',
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
@@ -97,145 +97,138 @@ class _RecetasUsuario extends State<RecetasUsuario> {
       endDrawer: MenuUsuario(
         id: widget.id,
       ),
-      backgroundColor: Colors.white.withOpacity(0.2),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
-                controller: buscadorController,
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Buscar categoría de la Receta...',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: buscadorController,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    hintText: 'Buscar categoría de la Receta...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    hintStyle: const TextStyle(color: Colors.black),
                   ),
-                  hintStyle: TextStyle(color: Colors.black),
+                  onChanged: (value) {
+                    _busquedaCategoria(value);
+                  },
                 ),
-                onChanged: (value) {
-                  _busquedaCategoria(value);
-                },
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: _recetasFiltradas.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: _recetasFiltradas.length,
-                          itemBuilder: (context, index) {
-                            final receta = _recetasFiltradas[index];
-                            return Container(
-                                color: Colors.white,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            VerReceta(receta: receta),
-                                      ),
-                                    );
-                                  },
-                                  child: Card(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Imagen de la receta
-                                        SizedBox(
-                                          height: 200,
-                                          width: double.infinity,
-                                          child: Image.file(
-                                            File(receta.fotoReceta),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        // Nombre de la receta centrado
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              receta.nombreReceta,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        // Descripción de la receta
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            receta.descripcionReceta,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                        // Categoría de la receta
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            'Categoría: ${receta.categoriaReceta}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                        // Botón de editar
-                                        Padding(
-                                          padding: EdgeInsets.all(20),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                bool? result =
-                                                    await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditarReceta(
-                                                            receta: receta),
-                                                  ),
-                                                );
-                                                if (result != null && result) {
-                                                  _cargarTodasRecetas(); // Recargar recetas al volver
-                                                }
-                                              },
-                                              child: Icon(Icons.edit,
-                                                  color: Colors.white),
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.black)),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
+              _recetasFiltradas.isNotEmpty
+                  ? ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _recetasFiltradas.length,
+                      itemBuilder: (context, index) {
+                        final receta = _recetasFiltradas[index];
+                        return Container(
+                            color: Colors.white,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        VerReceta(receta: receta),
                                   ),
-                                ));
-                          },
-                        )
-                      : Center(
-                          child: Text('No hay recetas disponibles'),
-                        ),
-                ),
-              ),
-            ),
-          ],
+                                );
+                              },
+                              child: Card(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Imagen de la receta
+                                    SizedBox(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: Image.file(
+                                        File(receta.fotoReceta),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    // Nombre de la receta centrado
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          receta.nombreReceta,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Descripción de la receta
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Text(
+                                        receta.descripcionReceta,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    // Categoría de la receta
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Text(
+                                        'Categoría: ${receta.categoriaReceta}',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    // Botón de editar
+                                    Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            bool? result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditarReceta(
+                                                        receta: receta),
+                                              ),
+                                            );
+                                            if (result != null && result) {
+                                              _cargarTodasRecetas(); // Recargar recetas al volver
+                                            }
+                                          },
+                                          child: Icon(Icons.edit,
+                                              color: Colors.white),
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  WidgetStateProperty.all(
+                                                      Colors.black)),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ));
+                      },
+                    )
+                  : const Center(
+                      child: Text('No hay recetas disponibles'),
+                    ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -252,7 +245,7 @@ class _RecetasUsuario extends State<RecetasUsuario> {
             _cargarTodasRecetas(); // Recargar recetas al volver
           }
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -24,24 +24,26 @@ class VerReceta extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(right: 34.0, left: 34.0, top: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (receta.fotoReceta.isNotEmpty)
-                Image.file(
-                  File(receta.fotoReceta),
-                  fit: BoxFit.cover,
-                ),
-              SizedBox(height: 16.0),
               Text(
-                receta.nombreReceta,
-                style: TextStyle(
+                'Receta de ${receta.nombreReceta}',
+                style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 10.0),
+              if (receta.fotoReceta.isNotEmpty)
+                Image.file(
+                  File(receta.fotoReceta),
+                  fit: BoxFit.cover,
+                  height: 350.0,
+                ),
+              SizedBox(height: 16.0),
               Text(
                 'Descripción:',
                 style: TextStyle(
