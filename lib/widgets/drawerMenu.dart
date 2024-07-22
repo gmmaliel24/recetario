@@ -68,54 +68,56 @@ class _MenuUsuarioState extends State<MenuUsuario> {
         child: CircularProgressIndicator(),
       );
     } else {
-      return Drawer(
-        width: 350,
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Row(
-                    children: [
-                      _convertirImagen(auxUser!.fotoUsuario),
-                      const SizedBox(
-                        width: 14.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${auxUser!.nombreUsuario} ${auxUser!.apellidoUsuario}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+      return SafeArea(
+        child: Drawer(
+          width: 350,
+          backgroundColor: Colors.white,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Row(
+                      children: [
+                        _convertirImagen(auxUser!.fotoUsuario),
+                        const SizedBox(
+                          width: 14.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${auxUser!.nombreUsuario} ${auxUser!.apellidoUsuario}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            auxUser!.correoUsuario,
-                            style: const TextStyle(
-                              decoration: TextDecoration.underline,
+                            Text(
+                              auxUser!.correoUsuario,
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Cerrar sesión'),
-                  onTap: () {
-                    alerta(context);
-                  },
-                ),
-              ],
-            ),
-          ],
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Cerrar sesión'),
+                    onTap: () {
+                      alerta(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
