@@ -22,8 +22,6 @@ El proyecto le creamos un manual para poder facilitar el entendimiento de su uso
 
 El apk de la aplicación se encuentra en este mismo repositorio.
 
-La ubicación de esta esta en:
-
-> build\app\outputs\flutter-apk\app-release.apk
+El apk no está en ninguna carpeta, se encuetra con el nombre de **tastyrecipes.apk**
 
 ¡Espero les guste la aplicación! Aceptamos comentarios constructivos y de mejora de la misma.
