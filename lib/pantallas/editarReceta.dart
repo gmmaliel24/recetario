@@ -24,15 +24,7 @@ class _EditarRecetaState extends State<EditarReceta> {
   late TextEditingController _controllerInstruccionesReceta;
   late TextEditingController _controllerTiempoReceta;
   File? _imageReceta;
-  final List<String> items = [
-    'Desayuno',
-    'Almuerzo',
-    'Cena',
-    'Postre',
-    'Refacción',
-    'Bebida Fría',
-    'Bebida Caliente',
-  ];
+  List<String> items = [];
   String? selectedValued;
 
   @override
@@ -49,6 +41,15 @@ class _EditarRecetaState extends State<EditarReceta> {
     _controllerTiempoReceta =
         TextEditingController(text: widget.receta.tiempoReceta.toString());
     selectedValued = widget.receta.categoriaReceta;
+    items = [
+      'Desayuno',
+      'Almuerzo',
+      'Cena',
+      'Postre',
+      'Refacción',
+      'Bebida Fría',
+      'Bebida Caliente',
+    ];
     _imageReceta = File(widget.receta.fotoReceta);
   }
 
