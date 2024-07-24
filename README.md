@@ -1,16 +1,29 @@
-# proyecto_recetario
+# RECETARIO EN FLUTTER (TASTY RECIPE)
 
-A new Flutter project.
+Este es un proyecto creado con Flutter para Dispositivos móviles. Está aplicación está diseñada para poder guardar recetas personales. Por lo cual, es necesario crear un usuario, para poder agregar recetas personales relacionadas al usuario ingresado.
 
-## Getting Started
+## Tecnologías usadas
 
-This project is a starting point for a Flutter application.
+Este proyecto fue creado con el framework de Flutter y el lenguaje de programación Dart. Que es el qué utiliza el framework.
 
-A few resources to get you started if this is your first Flutter project:
+- **Flutter:** Framework para realizar el diseño y poder generar la apk.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Dart:** El lenguaje qué utiliza el framework de Flutter, con el cual se creo la lógica del programa
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **SQLite:**  El sistema de gestión de bases de datos qué se utilizó para poder guardar la información a nivel local del dispositivo.
+
+## Manual de la Aplicación
+
+El proyecto le creamos un manual para poder facilitar el entendimiento de su uso.
+
+- [Manual de uso de la Aplicación](https://docs.google.com/document/d/1gKcZWAo_MwaXLn9EnzeyFlrd5JVCLNmD/edit?usp=sharing&ouid=102136412612372644119&rtpof=true&sd=true)
+
+## ¿Dondé encontrar el apk de la Aplicación?
+
+El apk de la aplicación se encuentra en este mismo repositorio.
+
+La ubicación de esta esta en:
+
+> build\app\outputs\flutter-apk\app-release.apk
+
+¡Espero les guste la aplicación! Aceptamos comentarios constructivos y de mejora de la misma.
