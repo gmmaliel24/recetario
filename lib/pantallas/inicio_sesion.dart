@@ -113,7 +113,8 @@ class _InicioSesionState extends State<InicioSesion> {
                     decoration: const InputDecoration(
                       suffixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 25.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 25.0, horizontal: 10.0),
                     ),
                   ),
                   const SizedBox(
@@ -129,6 +130,8 @@ class _InicioSesionState extends State<InicioSesion> {
                   TextField(
                     controller: _passwordController,
                     decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 25.0, horizontal: 10.0),
                         border: OutlineInputBorder(),
                         suffix: IconButton(
                           icon: Icon(

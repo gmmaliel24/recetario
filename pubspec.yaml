@@ -30,6 +30,7 @@ flutter:
 
   assets:
     - assets/imagens/fondo.jpg
+    - assets/imagens/fondo.avif
 
   # example:
   # fonts:

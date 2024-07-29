@@ -40,8 +40,8 @@ class Pantallainicio extends StatelessWidget {
                 height: 350,
                 width: double.infinity,
                 //child: I
-                child: Image.network(
-                  'https://media.traveler.es/photos/6389bc6569e39d7e3c4deea1/16:9/w_1600,c_limit/iStock-1284242004.jpg',
+                child: Image.asset(
+                  'assets/imagens/fondo.avif',
                   fit: BoxFit.cover,
                 )),
             const SizedBox(height: 30),
